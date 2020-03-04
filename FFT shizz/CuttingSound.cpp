@@ -1,18 +1,13 @@
 #include "CuttingSound.h"
 
-CuttingSound::CuttingSound(const uint16_t _buffer_size, 
-				const double _sampling_freq, 
-				const int _sampling_time,
-				const int _microphone_pin) :
-	buffer_size(_buffer_size),
-	sampling_frequency(_sampling_freq),
-	sampling_time(_sampling_time),
-	microphone_pin(_microphone_pin) {
+CuttingSound::CuttingSound(){
 
-
-	}
+  FFT = arduinoFFT();
+}
 
 void CuttingSound::getSpectrum(){
+
+  sampleSound();
 
   // Do fft shizzz
   FFT.Windowing(vReal, buffer_size, FFT_WIN_TYP_HAMMING, FFT_FORWARD);  /* Weigh data */
@@ -41,4 +36,31 @@ void CuttingSound::sampleSound(){
 double CuttingSound::getMajorPeak(){
 
 	return FFT.MajorPeak(vReal, buffer_size, sampling_frequency);
+}
+
+void CuttingSound::PrintVector(double *vData, uint16_t bufferSize, uint8_t scaleType)
+{
+  for (uint16_t i = 0; i < bufferSize; i++)
+  {
+    double abscissa;
+    /* Print abscissa value */
+    switch (scaleType)
+    {
+      case SCL_INDEX:
+        abscissa = (i * 1.0);
+  break;
+      case SCL_TIME:
+        abscissa = ((i * 1.0) / sampling_frequency);
+  break;
+      case SCL_FREQUENCY:
+        abscissa = ((i * 1.0 * sampling_frequency) / buffer_size);
+  break;
+    }
+    Serial.print(abscissa, 6);
+    if(scaleType==SCL_FREQUENCY)
+      Serial.print("Hz");
+    Serial.print(" ");
+    Serial.println(vData[i], 4);
+  }
+  Serial.println();
 }
