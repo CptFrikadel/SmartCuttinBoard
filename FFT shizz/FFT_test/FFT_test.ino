@@ -46,6 +46,9 @@ void loop() {
   Serial.println("Computed magnitudes:");
   PrintVector(vReal, (buffer_size >> 1), SCL_FREQUENCY);
 
+  double x = FFT.MajorPeak(vReal, buffer_size, sampling_frequency);
+  Serial.println("MAJOR PEAK -------------------------------");
+  Serial.println(x, 6);
     
 }
 
