@@ -1,4 +1,4 @@
-#include "CuttingSound.h"
+#include "CuttingSound.h" // Place the .h and .cpp file in your working directory
 
 
 CuttingSound cutting_sound = CuttingSound();
@@ -12,8 +12,9 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
 
   cutting_sound.getSpectrum();
+  Serial.println("Major Peak @");
+  Serial.println(cutting_sound.getMajorPeak());
 
 }
