@@ -20,24 +20,29 @@ class CuttingSound {
 
 private:
     // Setup constants
-    static const uint16_t buffer_size = 64; // MUST be power of two
-    static const double sampling_frequency = 10000; // Sampling frequensy in Hz
-    static const int sampling_time = 100; // Sample time in microseconds
-    static const int microphone_pin = A0;
+    const uint16_t buffer_size = 64; // MUST be power of two
+    const double sampling_frequency = 10000; // Sampling frequensy in Hz
+    const int sampling_time = 100; // Sample time in microseconds
+    const int microphone_pin = A0;
 
     arduinoFFT FFT;
 
 	public:
-		CuttingSound();
-		void getSpectrum();
+		CuttingSound(const uint16_t buffer_size,
+		              const double sampling_frequency,
+		              const int sampling_time,
+		              const int microphone_pin);
+		~CuttingSound();
+		SpectralSample * getSpectrum();
+		void calculateSpectrum();
 		double getMajorPeak();
-		SpectralSample spectrum[buffer_size];
+		SpectralSample * spectrum;
 
 	private:
   
 		// Sample buffers
-		double vReal[buffer_size];
-		double vImag[buffer_size];
+		double * vReal;
+		double * vImag;
 
 		// get sound sample to calculate fft of
 		void sampleSound();
