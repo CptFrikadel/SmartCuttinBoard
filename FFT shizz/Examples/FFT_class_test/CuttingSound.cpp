@@ -1,5 +1,5 @@
 #include "CuttingSound.h"
-
+//inherit Cuttingsound.h
 CuttingSound::CuttingSound(const uint16_t _buffer_size,
                  const double _sampling_freq,
                   const int _sampling_time,
@@ -8,14 +8,14 @@ CuttingSound::CuttingSound(const uint16_t _buffer_size,
                     sampling_frequency(_sampling_freq),
                     sampling_time(_sampling_time),
                     microphone_pin(_microphone_pin)
-                  
+                  //inherit all variables that are extracted from Cuttingsound
                   
                   {
 
   vReal = malloc(buffer_size * sizeof(double));
   vImag = malloc(buffer_size * sizeof(double));
   spectrum = malloc(buffer_size * sizeof(SpectralSample));
-
+  // set a memory block for the sizes of the imaginary FFT, the real value of the FFT and the Sound Spectrum 
   FFT = arduinoFFT();
 }
 
@@ -30,7 +30,7 @@ CuttingSound::~CuttingSound(){
 void CuttingSound::calculateSpectrum(){
 
 
-  // Do fft shizzz
+  // 
   FFT.Windowing(vReal, buffer_size, FFT_WIN_TYP_HAMMING, FFT_FORWARD);  /* Weigh data */
   FFT.Compute(vReal, vImag, buffer_size, FFT_FORWARD); /* Compute FFT */
   FFT.ComplexToMagnitude(vReal, vImag, buffer_size); /* Compute magnitudes */
@@ -46,7 +46,7 @@ SpectralSample * CuttingSound::getSpectrum(){
 
   calculateSpectrum();
   
-  // Populate spectrum vector 
+  // Populate spectrum vector with the sampling frequencey and the measured real sound spectrum
   for (uint16_t i = 0; i < buffer_size; i++){
 
 	  double freq = ((i * 1.0 * sampling_frequency) / buffer_size);
@@ -58,7 +58,7 @@ SpectralSample * CuttingSound::getSpectrum(){
 
 void CuttingSound::sampleSound(){
 
-	// Do samplings
+	// Do samplings of FFT as long as i is smaller than the set buffer size
 	for (uint16_t i = 0; i < buffer_size; i++){
 
 		// Sleep for the required sample time (This may or may not be accurate)
@@ -73,6 +73,7 @@ void CuttingSound::sampleSound(){
 double CuttingSound::getMajorPeak(){
 
 	return FFT.MajorPeak(vReal, buffer_size, sampling_frequency);
+	//return, next to each packet of 5000hz, the peak in sampling frequency per packet
 }
 
 void CuttingSound::PrintVector(double *vData, uint16_t bufferSize, uint8_t scaleType)
@@ -98,6 +99,7 @@ void CuttingSound::PrintVector(double *vData, uint16_t bufferSize, uint8_t scale
       Serial.print("Hz");
     Serial.print(" ");
     Serial.println(vData[i], 4);
+	  // Print FFT in lists of a total of 5000 hz
   }
   Serial.println();
 }
