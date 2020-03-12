@@ -7,13 +7,13 @@
     static const int microphone_pin = A0;
 
 CuttingSound cutting_sound = CuttingSound(buffer_size, sampling_frequency, sampling_time, microphone_pin);
-
+//set up a new instance of cutting_sound
 SpectralSample * spectrum = malloc(buffer_size * sizeof(SpectralSample));
-
+//Set up a memory block for the spectrum
 void setup() {
 
   Serial.begin(115200);
-  Serial.println("Wollah G!");
+  Serial.println("Begin");
 
 }
 
